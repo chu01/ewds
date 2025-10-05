@@ -1,0 +1,11 @@
+// =======================================
+// EWDS Banner Component
+// =======================================
+@use "../../core/core" as *;
+
+.ewds-banner {
+  background-color: $color-secondary;
+  color: $color-primary;
+  padding: $spacing-md;
+  border-left: 4px solid $color-accent;
+}

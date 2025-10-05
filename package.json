@@ -1,0 +1,20 @@
+{
+  "name": "@abiyub/ewds",
+  "version": "1.0.0",
+  "description": "Ethiopian Web Design System (EWDS) - Independent, USWDS-like framework",
+  "main": "dist/js/ewds.min.js",
+  "style": "dist/css/ewds.css",
+  "scripts": {
+    "build": "npm run clean && npm run build:sass && npm run build:js",
+    "build:sass": "sass src/styles/_main.scss dist/css/ewds.css --no-source-map --style=compressed",
+    "build:js": "esbuild src/index.js --bundle --outfile=dist/js/ewds.min.js --minify",
+    "clean": "rm -rf dist && mkdir -p dist/css dist/js"
+  },
+  "devDependencies": {
+    "sass": "^1.79.0",
+    "esbuild": "^0.21.5"
+  },
+  "keywords": ["ewds", "design-system", "ethiopia", "uswds-inspired"],
+  "author": "Abiyu Tegegn",
+  "license": "MIT"
+}

@@ -1,0 +1,15 @@
+// =======================================
+// EWDS Button Component
+// =======================================
+@use "../../core/core" as *;
+
+.ewds-button {
+  @include button-base;
+  background-color: $color-primary;
+  color: white;
+  border: none;
+
+  &:hover {
+    background-color: darken($color-primary, 5%);
+  }
+}
