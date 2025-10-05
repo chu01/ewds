@@ -1,6 +1,8 @@
 // =======================================
 // EWDS Mixins
 // =======================================
+@use './tokens' as *;
+
 @mixin button-base {
   border-radius: 0.25rem;
   font-weight: 600;
