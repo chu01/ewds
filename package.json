@@ -1,6 +1,6 @@
 {
   "name": "@abiyub/ewds",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Ethiopian Web Design System (EWDS) - Independent, USWDS-like framework",
   "type": "module",
   "main": "dist/js/ewds.min.js",
