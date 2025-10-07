@@ -2,19 +2,53 @@
   "name": "@abiyub/ewds",
   "version": "1.0.0",
   "description": "Ethiopian Web Design System (EWDS) - Independent, USWDS-like framework",
+  "type": "module",
   "main": "dist/js/ewds.min.js",
-  "style": "dist/css/ewds.css",
+  "module": "dist/js/ewds.min.js",
+  "style": "dist/css/ewds.min.css",
+  "sass": "src/styles/ewds.scss",
+  "exports": {
+    ".": {
+      "import": "./dist/js/ewds.min.js",
+      "default": "./dist/js/ewds.min.js"
+    },
+    "./css/*": "./dist/css/*",
+    "./img/*": "./dist/img/*",
+    "./fonts/*": "./dist/fonts/*"
+  },
   "scripts": {
-    "build": "npm run clean && npm run build:sass && npm run build:js",
+    "build": "npm run clean && npm run build:sass && gulp js",
     "build:sass": "sass src/styles/_main.scss dist/css/ewds.css --no-source-map --style=compressed",
-    "build:js": "esbuild src/index.js --bundle --outfile=dist/js/ewds.min.js --minify",
-    "clean": "rm -rf dist && mkdir -p dist/css dist/js"
+    "clean": "rm -rf dist && mkdir -p dist/css dist/js",
+    "watch": "gulp watch"
   },
   "devDependencies": {
-    "sass": "^1.79.0",
-    "esbuild": "^0.21.5"
+    "autoprefixer": "^10.4.21",
+    "del": "^8.0.1",
+    "esbuild": "^0.21.5",
+    "esbuild-sass-plugin": "^3.3.1",
+    "glob": "^11.0.3",
+    "gulp": "^5.0.1",
+    "gulp-imagemin": "^9.1.0",
+    "gulp-postcss": "^10.0.0",
+    "gulp-rename": "^2.1.0",
+    "gulp-replace": "^1.1.4",
+    "gulp-sass": "^6.0.1",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-svgstore": "^9.0.0",
+    "gulp-uglify": "^3.0.2",
+    "merge-stream": "^2.0.0",
+    "postcss": "^8.4.47",
+    "postcss-csso": "^6.0.1",
+    "sass": "^1.93.2",
+    "vite": "^5.4.10"
   },
-  "keywords": ["ewds", "design-system", "ethiopia", "uswds-inspired"],
+  "keywords": [
+    "ewds",
+    "design-system",
+    "ethiopia",
+    "uswds-inspired"
+  ],
   "author": "Abiyu Tegegn",
   "license": "MIT"
 }

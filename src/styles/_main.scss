@@ -1,6 +1,9 @@
 // =======================================
 // EWDS Main Stylesheet
 // =======================================
+@use "../packages/ewds";
 @use "../packages/core/core";
 @use "../packages/components/button";
 @use "../packages/components/banner";
+@use "../packages/components/ethio-accordion";
+
