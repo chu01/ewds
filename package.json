@@ -1,25 +1,32 @@
 {
   "name": "@abiyub/ewds",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Ethiopian Web Design System (EWDS) - Independent, USWDS-like framework",
   "type": "module",
   "main": "dist/js/ewds.min.js",
   "module": "dist/js/ewds.min.js",
   "style": "dist/css/ewds.min.css",
-  "sass": "src/styles/ewds.scss",
+  "sass": "dist/scss/ewds.scss",
   "exports": {
     ".": {
       "import": "./dist/js/ewds.min.js",
-      "default": "./dist/js/ewds.min.js"
+      "default": "./dist/js/ewds.min.js",
+      "sass": "./dist/scss/ewds.scss",
+      "style": "./dist/css/ewds.min.css"
     },
     "./css/*": "./dist/css/*",
     "./img/*": "./dist/img/*",
     "./fonts/*": "./dist/fonts/*"
   },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
+    "clean": "rm -rf dist && mkdir -p dist/css dist/js dist/scss",
+    "build:sass": "sass src/styles/_main.scss dist/css/ewds.min.css --no-source-map --style=compressed && cp -r src/styles dist/scss",
     "build": "npm run clean && npm run build:sass && gulp js",
-    "build:sass": "sass src/styles/_main.scss dist/css/ewds.css --no-source-map --style=compressed",
-    "clean": "rm -rf dist && mkdir -p dist/css dist/js",
     "watch": "gulp watch"
   },
   "devDependencies": {
