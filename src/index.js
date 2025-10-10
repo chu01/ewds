@@ -6,7 +6,8 @@
 // Core utilities
 // import "./packages/core/_mixins.js"; // if you have any shared JS utilities
 // import "./packages/core/_helpers.js"; // optional
-import "./packages/ewds-core/src/js/index.js"
+import "../packages/ewds-core/src/js/index.js"
+// import "./packages/ewds-core/src/js/index.js"
 
 // Components
 // import "./packages/components/button/button.js";

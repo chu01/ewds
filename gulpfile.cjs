@@ -3,8 +3,6 @@ const { logIntroduction } = require("./task-logger/utils/log-helper.cjs");
 
 logIntroduction("Building EWDS...");
 
-
-
 const gulp = require('gulp');
 const esbuild = require('esbuild');
 const glob = require('glob');
