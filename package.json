@@ -3,33 +3,38 @@
   "version": "1.0.3",
   "description": "Ethiopian Web Design System (EWDS) - Independent, USWDS-like framework",
   "type": "module",
-  "main": "dist/js/ewds.min.js",
-  "module": "dist/js/ewds.min.js",
+
+  "main": "dist/js/index.min.js",
+  "module": "dist/js/index.min.js",
   "style": "dist/css/ewds.min.css",
   "sass": "dist/scss/ewds.scss",
+
   "exports": {
     ".": {
-      "import": "./dist/js/ewds.min.js",
-      "default": "./dist/js/ewds.min.js",
+      "import": "./dist/js/index.min.js",
+      "default": "./dist/js/index.min.js",
       "sass": "./dist/scss/ewds.scss",
       "style": "./dist/css/ewds.min.css"
     },
     "./css/*": "./dist/css/*",
     "./img/*": "./dist/img/*",
-    "./fonts/*": "./dist/fonts/*"
+    "./fonts/*": "./dist/fonts/*",
+    "./scss/*": "./dist/scss/*"
   },
+
   "files": [
     "dist",
     "src",
     "LICENSE",
     "README.md"
   ],
+
   "scripts": {
     "clean": "rm -rf dist && mkdir -p dist/css dist/js dist/scss",
-    "build:sass": "sass src/styles/_main.scss dist/css/ewds.min.css --no-source-map --style=compressed && cp -r src/styles dist/scss",
-    "build": "npm run clean && npm run build:sass && gulp js",
+    "build": "gulp build",
     "watch": "gulp watch"
   },
+
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "del": "^8.0.1",
@@ -41,7 +46,6 @@
     "gulp-postcss": "^10.0.0",
     "gulp-rename": "^2.1.0",
     "gulp-replace": "^1.1.4",
-    "gulp-sass": "^6.0.1",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-svgstore": "^9.0.0",
     "gulp-uglify": "^3.0.2",
@@ -51,6 +55,7 @@
     "sass": "^1.93.2",
     "vite": "^5.4.10"
   },
+
   "keywords": [
     "ewds",
     "design-system",
