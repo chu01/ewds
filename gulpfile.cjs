@@ -1,4 +1,4 @@
-// gulpfile.cjs
+// gulpfile.cjs - IMPROVED VERSION
 const { logIntroduction } = require("./task-logger/utils/log-helper.cjs");
 logIntroduction("Building EWDS...");
 
@@ -8,18 +8,16 @@ const glob = require("glob");
 const path = require("path");
 const sass = require("sass");
 const fs = require("fs");
-const postcss = require("gulp-postcss");
-const autoprefixer = require("autoprefixer");
-const rename = require("gulp-rename");
 
 const paths = {
   js: "src/**/*.js",
-  scss: "src/styles/**/*.scss",
+  scss: "src/**/*.scss",  // All SCSS files
   scssEntry: "src/styles/ewds.scss",
   dist: {
-    js: "dist/js",
+    base: "dist",
+    js: "dist/js", 
     css: "dist/css",
-    scss: "dist/scss"
+    scss: "dist/scss/src"  // Maintain source structure
   }
 };
 
@@ -29,12 +27,12 @@ function handleError(err) {
   process.exit(1);
 }
 
-// Clean dist
+// Clean distribution
 function clean(done) {
-  if (fs.existsSync('dist')) {
-    fs.rmSync('dist', { recursive: true });
+  if (fs.existsSync(paths.dist.base)) {
+    fs.rmSync(paths.dist.base, { recursive: true });
   }
-  fs.mkdirSync('dist', { recursive: true });
+  fs.mkdirSync(paths.dist.base, { recursive: true });
   done();
 }
 
@@ -54,12 +52,11 @@ function js() {
     format: "esm",
     outdir: paths.dist.js,
     entryNames: "[name].min",
-    target: ["es2018"],
-    external: [] // Specify external dependencies if any
+    target: ["es2018"]
   }).catch(handleError);
 }
 
-// CSS Build with PostCSS
+// CSS Build
 function css() {
   return new Promise((resolve, reject) => {
     try {
@@ -69,44 +66,44 @@ function css() {
       // Expanded CSS
       const result = sass.compile(path.resolve(paths.scssEntry), {
         style: "expanded",
-        sourceMap: true
+        loadPaths: [path.dirname(paths.scssEntry)]  // Fix import paths
       });
       fs.writeFileSync(path.join(outDir, "ewds.css"), result.css);
-      if (result.sourceMap) {
-        fs.writeFileSync(path.join(outDir, "ewds.css.map"), JSON.stringify(result.sourceMap));
-      }
 
       // Minified CSS
       const resultMin = sass.compile(path.resolve(paths.scssEntry), {
-        style: "compressed"
+        style: "compressed",
+        loadPaths: [path.dirname(paths.scssEntry)]
       });
       fs.writeFileSync(path.join(outDir, "ewds.min.css"), resultMin.css);
 
+      console.log(`✅ CSS built: ${path.join(outDir, "ewds.css")}`);
       resolve();
     } catch (err) {
+      console.error('❌ CSS build failed:', err.message);
       reject(err);
     }
   });
 }
 
-// Copy SCSS
+// Copy SCSS sources
 function scss() {
   return gulp.src(paths.scss)
     .pipe(gulp.dest(paths.dist.scss))
     .on('error', handleError);
 }
 
-// Watch
+// Watch files
 function watch() {
   gulp.watch(paths.js, js).on('change', (path) => {
-    console.log(`JS changed: ${path}`);
+    console.log(`🔁 JS changed: ${path}`);
   });
   gulp.watch(paths.scss, gulp.series(css, scss)).on('change', (path) => {
-    console.log(`SCSS changed: ${path}`);
+    console.log(`🔁 SCSS changed: ${path}`);
   });
 }
 
-// Exports
+// Export tasks
 exports.clean = clean;
 exports.js = js;
 exports.css = css;
