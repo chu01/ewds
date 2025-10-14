@@ -1,6 +1,6 @@
 {
   "name": "@abiyub/ewds",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Ethiopian Web Design System (EWDS)",
   "type": "module",
   "main": "dist/js/index.min.js",
@@ -79,8 +79,5 @@
   "homepage": "https://github.com/ch01/ewds#readme",
   "bugs": {
     "url": "https://github.com/ch01/ewds/issues"
-  },
-  "dependencies": {
-    "@abiyub/ewds": "file:abiyub-ewds-1.0.7.tgz"
   }
 }
