@@ -1,6 +1,6 @@
 {
   "name": "@abiyub/ewds",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Ethiopian Web Design System (EWDS) - Independent, USWDS-like framework",
   "type": "module",
 
@@ -32,7 +32,9 @@
   "scripts": {
     "clean": "rm -rf dist && mkdir -p dist/css dist/js dist/scss",
     "build": "gulp build",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "prepublishOnly": "npm run build",
+    "dev": "npm run build && npm run watch"
   },
 
   "devDependencies": {
@@ -55,7 +57,14 @@
     "sass": "^1.93.2",
     "vite": "^5.4.10"
   },
-
+  "peerDependencies": {
+  "react": ">=16.8.0",
+  "react-dom": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true }
+  },
   "keywords": [
     "ewds",
     "design-system",
@@ -63,5 +72,13 @@
     "uswds-inspired"
   ],
   "author": "Abiyu Tegegn",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/your-username/ewds"
+  },
+  "homepage": "https://github.com/ch01/ewds#readme",
+  "bugs": {
+    "url": "https://github.com/ch01/ewds/issues"
+  }
 }

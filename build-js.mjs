@@ -3,59 +3,68 @@ import { glob } from "glob";
 import { build } from "esbuild";
 import fs from "fs";
 import path from "path";
-import url from "url";
 import { sassPlugin } from "esbuild-sass-plugin";
 
-
-const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-
 async function bundleAll() {
-  console.log("📦 Bundling JS files...");
+  console.log("📦 Bundling EWDS components...");
 
-  // 1️⃣ Find all JS files under src/packages/components/
-  const files = await glob("src/packages/components/**/*.js", { absolute: true });
-  console.log(`Found ${files.length} component files`);
+  const componentFiles = await glob("src/packages/components/**/*.js", {
+    absolute: true,
+    ignore: [
+      "**/*.spec.js",
+      "**/*.test.js",
+      "**/test/**",
+      "**/*.stories.js",
+      "**/__tests__/**",
+      "**/__mocks__/**"
+    ]
+  });
 
-  // 2️⃣ Create a temporary entry file that imports them all
-  const tempDir = path.join(__dirname, "dist/temp");
+  console.log(`Found ${componentFiles.length} component files:`);
+  componentFiles.forEach((file, index) => {
+    console.log(`  ${index + 1}. ${path.relative(process.cwd(), file)}`);
+  });
+
+  if (componentFiles.length === 0) {
+    console.warn("⚠️  No component files found!");
+    return;
+  }
+
+  const tempDir = path.join(process.cwd(), "dist/temp");
   const entryFile = path.join(tempDir, "entry.js");
 
+  // Ensure clean temp directory
+  if (fs.existsSync(tempDir)) {
+    fs.rmSync(tempDir, { recursive: true });
+  }
   fs.mkdirSync(tempDir, { recursive: true });
 
-  // 🧹 Filter out test and storybook files
-  const imports = files
-    .filter(f =>
-      !f.includes(".spec.") &&
-      !f.includes(".test.") &&
-      !f.includes("/test/") &&
-      !f.endsWith(".stories.js")
-    )
-    .map(f => `import "${path.relative(tempDir, f).replace(/\\/g, "/")}";`)
+  // Create entry file
+  const imports = componentFiles
+    .map(file => `import "${file}";`)
     .join("\n");
-
+  
   fs.writeFileSync(entryFile, imports);
 
-  // 3️⃣ Run esbuild to bundle everything into one minified file
   try {
     await build({
       entryPoints: [entryFile],
       bundle: true,
       minify: true,
+      sourcemap: true,
       outfile: "dist/js/ewds.min.js",
       format: "esm",
       target: ["es2018"],
       logLevel: "info",
       plugins: [sassPlugin()],
-      absWorkingDir: path.join(__dirname, "src/packages"),
-
-      // ✅ Loaders for assets
+      absWorkingDir: process.cwd(),
       loader: {
         ".js": "js",
         ".css": "css",
+        ".scss": "css",
         ".svg": "dataurl",
         ".png": "dataurl",
         ".jpg": "dataurl",
-        ".jpeg": "dataurl",
         ".woff": "file",
         ".woff2": "file",
       },
@@ -63,13 +72,27 @@ async function bundleAll() {
     });
 
     console.log("✅ JS bundling completed successfully!");
+    
+    // Verify output
+    if (fs.existsSync("dist/js/ewds.min.js")) {
+      const stats = fs.statSync("dist/js/ewds.min.js");
+      console.log(`📄 Output: dist/js/ewds.min.js (${(stats.size / 1024 / 1024).toFixed(2)} MB)`);
+    }
   } catch (err) {
-    console.error("❌ Build failed:", err.message);
+    console.error("❌ Build failed:", err);
     process.exit(1);
+  } finally {
+    // Cleanup
+    if (fs.existsSync(tempDir)) {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
   }
-
-  // 4️⃣ Clean up temp directory
-  fs.rmSync(tempDir, { recursive: true, force: true });
 }
 
-bundleAll();
+// Export for use in Gulp if needed
+export { bundleAll };
+
+// Run if called directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  bundleAll();
+}
